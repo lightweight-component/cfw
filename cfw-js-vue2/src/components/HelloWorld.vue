@@ -1,7 +1,22 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <p>
 
+          <OpacityBanner style="width:300px;margin:0 auto">
+      <li><img src="https://img1.mydrivers.com/img/topimg/20220315/192429144.jpg" /></li>
+      <li><img src="https://img1.mydrivers.com/img/topimg/20220315/192403940.jpg" /></li>
+      <li><img src="https://img1.mydrivers.com/img/topimg/20220315/192314256.jpg" /></li>
+      <li><a target="iframepage" href="../job/job.jsp">招聘管理</a></li>
+    </OpacityBanner>
+    
+          <Expander :close-height="50" style="width: 300px;margin:5% auto;">
+      Lorem Ipsum，也称乱数假文或者哑元文本， 是印刷及排版领域所常用的虚拟文字。
+      由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书， Lorem Ipsum从西元15世纪起就被作为此领域的标准文本使用。
+      <div class="mask-layer"></div>
+    </Expander>
+
+    </p>
     <FooAbc></FooAbc>
     <HelloWorld />
     <p>
@@ -35,14 +50,17 @@
 
 <script>
 // import HelloWorld from '@ajaxjs/configurable-widget-vue2/';
+// import  Calendar  from "@ajaxjs/widgets";
+// console.log(Calendar);
 
 export default {
-  name: 'HelloWorld2',
+  // components: { Calendar },
+  name: "HelloWorld2",
   // components:{HelloWorld},
   props: {
-    msg: String
-  }
-}
+    msg: String,
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

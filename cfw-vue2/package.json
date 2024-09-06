@@ -3,15 +3,19 @@
   "version": "1.0.7",
   "private": false,
   "main": "lib/cfw-vue2.umd.min.js",
+  "author": "sp42",
+  "license": "Apache License 2.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --target lib --name cfw-vue2 --dest lib src/components/index.js"
+    "lib": "vue-cli-service build --target lib --name cfw-vue2 --dest dist src/components/index.js"
   },
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
-    "core-js": "^3.8.3",
-    "vue": "^2.6.14"
+    "@ajaxjs/util": "1.1.3"
   },
   "publishConfig": {
     "access": "public"
@@ -27,6 +31,8 @@
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
     "less": "^4.0.0",
+    "vue": "^2.6.14",
+    "view-design": "^4.7.0",
     "less-loader": "^8.0.0",
     "typescript": "~4.5.5",
     "vue-template-compiler": "^2.6.14"
