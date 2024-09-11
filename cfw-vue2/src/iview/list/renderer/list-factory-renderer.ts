@@ -39,13 +39,13 @@ export default {
     methods: {
         getData(): void {
             this.list.loading = true;
-            let params: any = { pageNo: this.list.pageNo, pageSize: this.list.pageSize };
+            const params: any = { pageNo: this.list.pageNo, pageSize: this.list.pageSize };
 
             if (this.list.search.name)
                 params.where = `name LIKE '%${this.list.search.name}%'`;
 
-            let listCfg: ListFactory_ListConfig = this.cfg;
-            let r: ManagedRequest = prepareRequest(listCfg.dataBinding, params, this);
+            const listCfg: ListFactory_ListConfig = this.cfg;
+            const r: ManagedRequest = prepareRequest(listCfg.dataBinding, params, this);
             this.list.data = []; // 清空数据
 
             Xhr.xhr_get(r.url, (j: RepsonseResult) => {
@@ -105,7 +105,7 @@ export default {
 
         _openForm(row: any, rowId: number, formMode: number): void {
             // 加载表单配置
-            let apiRoot: string = this.apiRoot || this.$parent.$parent.$parent.apiRoot;
+            const apiRoot: string = this.apiRoot || this.$parent.$parent.$parent.apiRoot;
 
             if (!apiRoot)
                 alert('无法获取根目录');
@@ -124,13 +124,13 @@ export default {
                 return;
             } else
                 formCfgId = this.cfg.bindingForm.id;//  表单配置
-                debugger
+            debugger
 
-                Xhr.xhr_get(`${apiRoot}/common_api/widget_config/${formCfgId}`, (j: RepsonseResult) => {
+            Xhr.xhr_get(`${apiRoot}/common_api/widget_config/${formCfgId}`, (j: RepsonseResult) => {
                 if (j.status) {
                     this.isShowForm = true;
                     this.form.cfg = j.data.config;// 数据库记录转换到 配置对象;
-                    let cfg: FormFactory_Config = this.form.cfg;
+                    const cfg: FormFactory_Config = this.form.cfg;
                     this.form.fields = cfg.fields;
                     this.$refs.FromRenderer.status = formMode;
 
@@ -163,11 +163,11 @@ export default {
         },
 
         formSave(): void {
-
+            debugger;
         },
         btnClk(js: string, entity?: object, index?: number): void {
             if (entity) {
-                let fn: Function = new Function('row', 'index', js);
+                const fn: any = new Function('row', 'index', js);
                 fn.call(this, entity, index);
             } else
                 eval(js);
@@ -218,7 +218,7 @@ export function prepareRequest(dataBinding: DataBinding, params?: any, cmp?: any
         Object.assign(params, JSON.parse(dataBinding.baseParams));
 
     if (dataBinding.beforeRequest) {
-        let before: Function = new Function('params', dataBinding.beforeRequest);
+        const before: any = new Function('params', dataBinding.beforeRequest);
         before.call(cmp || this, params);
     }
 
