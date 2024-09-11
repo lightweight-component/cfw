@@ -65,8 +65,8 @@ export default function (rendererColDef: iViewTableColumn, item: TableColumn): v
  * @param params 
  * @returns 
  */
-function state(h: Function, params: any) {
-    let value = params.row[params.column.key]; // 取出当前值
+function state(h: (a: string, b: object, c: string) => any, params: any) {
+    const value = params.row[params.column.key]; // 取出当前值
     const dot = '•';
 
     switch (value) {
@@ -90,9 +90,9 @@ function state(h: Function, params: any) {
     }
 }
 
-function sex(h: Function, params: any) {
-    let value: number = params.row[params.column.key]; // 取出当前值
-    let str: string = '';
+function sex(h: (a: string, b: string) => any, params: any) {
+    const value: number = params.row[params.column.key]; // 取出当前值
+    let str = '';
 
     switch (value) {
         case 1:
@@ -109,35 +109,35 @@ function sex(h: Function, params: any) {
     return h('span', str);
 }
 
-function email(h: Function, params: any) {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function email(h: (a: string, b: object, c: string) => any, params: any) {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     return value ? h('a', {
         attrs: { href: 'mailto://' + value }
     }, value) : '';
 }
 
-function link(h: Function, params: any) {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function link(h: (a: string, b: object, c: string) => any, params: any) {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     return value ? h('a', {
         attrs: { href: value, target: '_blank', title: value }
     }, '超链接') : '';
 }
 
-function link_http(h: Function, params: any) {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function link_http(h: (a: string, b: object, c: string) => any, params: any) {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     return value ? h('a', {
         attrs: { href: value, target: '_blank', title: value }
     }, value) : '';
 }
 
-function date(h: Function, params: any) {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function date(h: (a: string, b: string) => any, params: any) {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     if (value) {
-        let arr: string[] = value.split(':');
+        const arr: string[] = value.split(':');
         arr.pop();
         arr.pop();
 
@@ -146,8 +146,8 @@ function date(h: Function, params: any) {
         return '';
 }
 
-function long_date(h: Function, params: any) {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function long_date(h: (a: string, b: string) => any, params: any) {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     if (value && isoDateTimeRegex.test(value)) // 先判断是否 ISO 8601 格式的日期和时间 的字符串
         return h('span', convertDateLong(value));
@@ -158,7 +158,7 @@ function long_date(h: Function, params: any) {
 const isoDateTimeRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:.\d*)?)$/;
 
 function convertDate(isoDate: any): string {
-    let date = new Date(isoDate);
+    const date = new Date(isoDate);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -169,7 +169,7 @@ function convertDate(isoDate: any): string {
 }
 
 function convertDateLong(isoDate: any): string {
-    let date = new Date(isoDate);
+    const date = new Date(isoDate);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -180,14 +180,14 @@ function convertDateLong(isoDate: any): string {
     return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`;
 }
 
-function short_date(h: Function, params: any): string {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function short_date(h: (a: string, b: string) => any, params: any): string {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     if (value) {
         if (isoDateTimeRegex.test(value)) // 先判断是否 ISO 8601 格式的日期和时间 的字符串
             return h('span', convertDate(value));
 
-        let arr: string[] = value.split(':');
+        const arr: string[] = value.split(':');
         arr.pop();
 
         return value ? h('span', arr.join(':')) : '';
@@ -195,8 +195,8 @@ function short_date(h: Function, params: any): string {
         return '';
 }
 
-function thumb(h: Function, params: any) {
-    let value: string = params.row[params.column.key]; // 取出当前值
+function thumb(h: (a: string, b: object, c?: any[]) => any, params: any) {
+    const value: string = params.row[params.column.key]; // 取出当前值
 
     return value ? h('a', {
         attrs: {
@@ -211,9 +211,9 @@ function thumb(h: Function, params: any) {
     ]) : '';
 }
 
-function clk_event(clk: Function): Function {
-    return (h: Function, params: any) => {
-        let value: string = params.row[params.column.key]; // 取出当前值
+function clk_event(clk: (a: any) => any): (h: (a: string, b: object, c: string) => any, params: any) => any {
+    return (h: (a: string, b: object, c: string) => any, params: any) => {
+        const value: string = params.row[params.column.key]; // 取出当前值
 
         return value ? h('a', {
             on: { 'click': () => clk(params.row) }
@@ -221,13 +221,13 @@ function clk_event(clk: Function): Function {
     };
 }
 
-function customRender(arr: JsonParam[]): Function {
+function customRender(arr: JsonParam[]): (h: (a: string, b: any) => any, params: any) => any {
     // arr to map
-    let map: { [key: string]: any } = {};
+    const map: { [key: string]: any } = {};
     arr.forEach(item => map[(item.value) + ""] = item.name);
 
-    return (h: Function, params: any) => {
-        let value: string = params.row[params.column.key]; // 取出当前值
+    return (h: (a: string, b: any) => any, params: any) => {
+        const value: string = params.row[params.column.key]; // 取出当前值
         return (value == '0' || value) ? h('span', map[value]) : '';
     };
 }

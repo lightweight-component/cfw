@@ -16,6 +16,7 @@ export default Vue.extend({
         createRoute: { type: String, required: false },     // 新建事件触发时候，进入的路由地址
         editRoute: { type: String, required: false },       // 编辑事件触发时候，进入的路由地址
         defaultAction: { type: Boolean, required: false, default: true },
+        id: { type: Number, required: false, default: 0 },
         showSearch: { type: Boolean, required: false, default: true },
         modalInfo: { type: Boolean, required: false, default: true }, // 是否弹窗显示详情，false 为进入新页面
     },
@@ -24,7 +25,7 @@ export default Vue.extend({
             widgetName_: '',
             cfg: { fields: [] },
             listApiUrl_: '',
-            colDefId: 0,
+            colDefId: this.id,
             list: {
                 columns: [],
                 data: [],
@@ -41,6 +42,11 @@ export default Vue.extend({
             isShowForm: false,
             bindingFormId: 0
         };
+    },
+
+    mounted(): void {
+        if(this.id)
+            this.getRemoteColDef();
     },
 
     methods: {
@@ -61,15 +67,13 @@ export default Vue.extend({
         renderConfig(cfg: ListFactory_ListConfig_New): void {
             this.bindingFormId = cfg.bindingFormId;
             this.listApiUrl_ = cfg.httpApi.replace('{project_prefix}', this.apiPrefix);
-            let colDefs: TableColumn[] = cfg.colConfig;
+            const colDefs: TableColumn[] = cfg.colConfig;
             this.list.columns = [];
 
             colDefs.forEach((item: TableColumn) => { // 转换为 iView 的配置
                 if (item.isShow) {
-                    let rendererColDef: iViewTableColumn = { title: item.title, key: item.key, width: item.width, minWidth: item.minWidth, align: item.align };
-
+                    const rendererColDef: iViewTableColumn = { title: item.title, key: item.key, width: item.width, minWidth: item.minWidth, align: item.align };
                     CellRender(rendererColDef, item);
-
                     this.list.columns.push(rendererColDef);
                 }
             });
@@ -81,7 +85,7 @@ export default Vue.extend({
         },
         getData(): void {
             this.list.loading = true;
-            let params: any = { pageNo: this.list.pageNo, pageSize: this.list.pageSize };
+            const params: any = { pageNo: this.list.pageNo, pageSize: this.list.pageSize };
 
             // if (this.list.search.name)
             //     params.where = `name LIKE '%${this.list.search.name}%'`;
@@ -105,7 +109,7 @@ export default Vue.extend({
             this.getData();
         },
         reset(): void {
-            for (let i in this.search)
+            for (const i in this.search)
                 this.search[i] = "";
 
             this.getData();

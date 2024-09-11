@@ -21,7 +21,7 @@ export default {
             status: 1  // 0=查看/1=新增/2=修改
         };
     },
-    render(h: Function): any {
+    render(h: (a:string, b:object, c?: any[]) => any): any {
         if(!this.cfg.fields || !this.cfg.fields.length)
             return;
             

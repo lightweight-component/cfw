@@ -41,9 +41,9 @@ export default Vue.extend({
                 if (j && j.status) {
                     this.cfg = j.data.config;
 
-                    let cfg: FormFactory_Config = this.cfg;
-                    let isJsonBased = cfg.jsonBased && cfg.jsonBased.isJsonBased;
-                    let dataBinding: DataBinding = cfg.dataBinding;
+                    const cfg: FormFactory_Config = this.cfg;
+                    const isJsonBased = cfg.jsonBased && cfg.jsonBased.isJsonBased;
+                    const dataBinding: DataBinding = cfg.dataBinding;
 
                     if (isJsonBased) {
                         this.status = 2; // JSON 配置模式下没有新建
@@ -51,7 +51,7 @@ export default Vue.extend({
                         Xhr.xhr_get(dataBinding.url, (j: RepsonseResult) => {
                             this.oldJson = j; // 完整的
 
-                            let jsonTarget: any = findNode(this.oldJson, this.entityId.split(".")); // 部分的，目标的
+                            const jsonTarget: any = findNode(this.oldJson, this.entityId.split(".")); // 部分的，目标的
 
                             this.$refs.FromRenderer.data = {};
                             Object.assign(this.$refs.FromRenderer.data, jsonTarget);
@@ -65,7 +65,7 @@ export default Vue.extend({
                                     this.$refs.FromRenderer.data = j;
                                     this.$refs.FromRenderer.$forceUpdate();
                                 } else {
-                                    let r = j.data;
+                                    const r = j.data;
 
                                     if (r) {
                                         this.$refs.FromRenderer.data = r;
@@ -90,9 +90,10 @@ export default Vue.extend({
          * 创建
          */
         create(): void {
-            let cfg: FormFactory_Config = this.cfg, api: DataBinding;
+            const cfg: FormFactory_Config = this.cfg;
+            let api: DataBinding;
 
-            let callback = (j: RepsonseResult) => {
+            const callback = (j: RepsonseResult) => {
                 if (j.status) {
                     this.$Message.success(j.message);
                     setTimeout(() => location.hash = location.hash + '&entityId=' + j.data, 2000);
@@ -102,12 +103,12 @@ export default Vue.extend({
 
             if (cfg.isRESTful_writeApi) {
                 api = cfg.updateApi;
-                let r: ManagedRequest = this._initParams(api);
+                const r: ManagedRequest = this._initParams(api);
 
                 Xhr.xhr_post(r.url, callback, r.params);
             } else {
                 api = cfg.createApi;
-                let r: ManagedRequest = this._initParams(api);
+                const r: ManagedRequest = this._initParams(api);
 
                 (api.httpMethod == 'post' ? Xhr.xhr_post : Xhr.xhr_put)(r.url, callback, r.params);
             }
@@ -117,22 +118,23 @@ export default Vue.extend({
           * 更新
           */
         update(): void {
-            let cfg: FormFactory_Config = this.cfg, api: DataBinding = cfg.updateApi;
-            let params: any = api.baseParams || {};
+            const cfg: FormFactory_Config = this.cfg;
+            const api: DataBinding = cfg.updateApi;
+            const params: any = api.baseParams || {};
 
             if (cfg.jsonBased.isJsonBased) {// Raw body post
-                let jsonTarget: any = findNode(this.oldJson, this.entityId.split('.'));
+                const jsonTarget: any = findNode(this.oldJson, this.entityId.split('.'));
                 Object.assign(jsonTarget, this.$refs.FromRenderer.data);
 
-                // @ts-ignore
-                let json: string = JSON.stringify(r.params);
+                // @ts-ignore xxxx
+                const json: string = JSON.stringify(r.params);
                 console.log(json);
 
                 Xhr.xhr_post(api.url, (j: RepsonseResult) => {
                     console.log(j)
                 }, json, { contentType: 'application/json' });
             } else {
-                let r: ManagedRequest = this._initParams(api, this.$refs.FromRenderer.data, this);
+                const r: ManagedRequest = this._initParams(api, this.$refs.FromRenderer.data, this);
 
                 Xhr.xhr_put(r.url, (j: RepsonseResult) => {
                     if (j.status)
@@ -149,11 +151,11 @@ function findNode(obj: any, queen: string[]): any {
     if (!queen.shift)
         return null;
 
-    let first: string = queen.shift();
+    const first: string = queen.shift();
 
-    for (let i in obj) {
+    for (const i in obj) {
         if (i === first) {
-            let target: any = obj[i];
+            const target: any = obj[i];
 
             if (queen.length == 0) {
                 // 找到了
